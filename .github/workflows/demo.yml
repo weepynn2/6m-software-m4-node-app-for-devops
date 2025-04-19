@@ -9,12 +9,13 @@ on:
     branches:
       - main
 
+env:
+  IMAGE_NAME: weepynn/my-node-app
+
 jobs:
   build:
-  runs-on: ubuntu-latest # Uses GitHub-hosted Ubuntu runner
-  env:
-      IMAGE_NAME: weepynn/my-node-app
-  steps:
+    runs-on: ubuntu-latest # Uses GitHub-hosted Ubuntu runner
+    steps:
     - uses: actions/checkout@v3 # Checks out repository code
     - name: Set up Node.js
       uses: actions/setup-node@v3 # Sets up Node.js environment
@@ -26,11 +27,10 @@ jobs:
     - name: Simulate build
       run: echo "Simulate build" # Placeholder for actual build command
 
-  
-test:
-  needs: build # This job runs after the build job completes
-  runs-on: ubuntu-latest
-  steps:
+  test:
+    needs: build # This job runs after the build job completes
+    runs-on: ubuntu-latest
+    steps:
     # Similar setup to build job
     - uses: actions/checkout@v3
     - name: Set up Node.js
@@ -45,10 +45,10 @@ test:
         echo "Running tests..."
         npm run test  # Runs the test script from package.json
 
-publish:
-  needs: test # This job runs after the test job completes
-  runs-on: ubuntu-latest
-  steps:
+  publish:
+    needs: test # This job runs after the test job completes
+    runs-on: ubuntu-latest
+    steps:
     - uses: actions/checkout@v3
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2 # Sets up Docker build system
