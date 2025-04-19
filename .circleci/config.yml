@@ -27,11 +27,11 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t education-space/my-node-app:latest .
+            docker build -t weepynn/my-node-app:latest .
       - run:
           name: Push Docker image
           command: |
-            docker push education-space/my-node-app:latest
+            docker push weepynn/my-node-app:latest
 
 workflows:
   build_test_and_deploy:
