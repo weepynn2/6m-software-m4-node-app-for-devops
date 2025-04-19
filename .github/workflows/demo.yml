@@ -12,6 +12,8 @@ on:
 jobs:
   build:
   runs-on: ubuntu-latest # Uses GitHub-hosted Ubuntu runner
+  env:
+      IMAGE_NAME: weepynn/my-node-app
   steps:
     - uses: actions/checkout@v3 # Checks out repository code
     - name: Set up Node.js
@@ -60,4 +62,4 @@ publish:
       with:
         context: .
         push: true
-        tags: huai99/education-space:latest # Tags the Docker image
+        tags: docker.io/${{ env.IMAGE_NAME }}:latest # Tags the Docker image
