@@ -1,35 +1,42 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.1
+  node: circleci/node@5.1.0
+  docker: circleci/docker@2.4.0
 
 jobs:
-  build:
-    docker:
-      - image: cimg/node:16.10
-    steps:
-      - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run: |
-          echo "Installing dependencies..."
-          npm install
-
   test:
-    docker:
-      - image: cimg/node:16.10
+    executor:
+      name: node/default
     steps:
       - checkout
-      - node/install-packages:
-          pkg-manager: npm
-      - run: |
-          echo "Running tests..."
-          npm run test
+      - node/install-packages
+      - run:
+          name: Run tests
+          command: npm test
+
+  build-and-push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check:
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t education-space/my-node-app:latest .
+      - run:
+          name: Push Docker image
+          command: |
+            docker push education-space/my-node-app:latest
 
 workflows:
-  simple_workflow:
+  build_test_and_deploy:
     jobs:
-      - build
-      - test:
+      - test
+      - build-and-push:
           requires:
-            - build
+            - test
