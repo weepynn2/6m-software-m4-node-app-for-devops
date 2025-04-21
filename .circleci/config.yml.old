@@ -1,0 +1,42 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+  docker: circleci/docker@2.4.0
+
+jobs:
+  test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          name: Run tests
+          command: npm test
+
+  build-and-push:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check:
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t weepynn/my-node-app:latest .
+      - run:
+          name: Push Docker image
+          command: |
+            docker push weepynn/my-node-app:latest
+
+workflows:
+  build_test_and_deploy:
+    jobs:
+      - test
+      - build-and-push:
+          requires:
+            - test
