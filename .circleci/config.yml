@@ -30,7 +30,9 @@ jobs:
     steps:
       - setup_remote_docker
       - checkout
-      - docker/check
+      - docker/check:
+          docker-username: DOCKERHUB_USERNAME
+          docker-password: DOCKERHUB_PASSWORD
       - docker/build:
           image: weepynn/my-node-app
       - docker/push:
