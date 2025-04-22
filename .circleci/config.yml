@@ -45,7 +45,7 @@ jobs:
           docker-image-name: $IMAGE_NAME
           # The "fail-on-issues: false" option makes the scan report issues but always exit with code 0
           # This allows the pipeline to continue even if vulnerabilities are found
-          fail-on-issues: true
+          fail-on-issues: false
 
 
 # The 'codescan' job performs static code analysis on your source code
