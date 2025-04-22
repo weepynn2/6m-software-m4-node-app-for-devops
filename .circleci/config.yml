@@ -105,6 +105,12 @@ workflows:
               only:
                 - main
                 - release
+      - scan:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main
       - publish:
           requires:
             - test
